@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 390">
+  <defs>
+    <pattern id="grain" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 0h1v1H0zM3 3h1v1H3z" fill="#151515" opacity=".12"/></pattern>
+  </defs>
+  <path fill="#de0358" d="M0 0h320v390H0z"/>
+  <circle cx="232" cy="116" r="84" fill="#7aeae4" opacity=".85"/>
+  <path d="M0 307Q130 266 320 309v81H0Z" fill="#7aeae4" opacity=".4"/>
+  <g transform="rotate(-2 160 170)">
+    <g fill="#28201c"><path d="M92 148c-14-22-13-58 10-77 22-24 65-24 94-14 28 9 44 36 39 68l-14 32Z"/></g>
+    <path d="M34 390c7-56 21-91 61-111l34-16h62l33 16c40 20 54 55 62 111Z" fill="#7aeae4" stroke="#151515" stroke-width="2"/>
+    <path d="M133 226h54l7 46c-10 21-54 22-67 0Z" fill="#c88058"/>
+    <path d="M132 231h54v15c-13 19-31 23-54 14Z" fill="#985939"/>
+    <path d="M97 153c-22-19-30 19-12 35l16 5m122-40c22-19 30 19 12 35l-16 5" fill="#c88058" stroke="#985939" stroke-width="2"/>
+    <path d="M100 116c8-25 29-38 60-38s53 13 61 38c8 24 5 71-6 92-12 24-35 41-55 41s-43-17-55-41c-11-21-14-68-5-92Z" fill="#c88058"/>
+    <path d="M115 155q11-8 24-3m42 0q12-5 24 3" fill="none" stroke="#28201c" stroke-width="3.5" stroke-linecap="round"/>
+    <ellipse cx="127" cy="168" rx="3.8" ry="4.7" fill="#151515"/><ellipse cx="193" cy="168" rx="3.8" ry="4.7" fill="#151515"/>
+    <path d="m160 168-5 24 9 2" fill="none" stroke="#985939" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M143 210q17 11 34-1" fill="none" stroke="#4d2423" stroke-width="3" stroke-linecap="round"/>
+    <path d="m114 195 13 3m66 0 13-3" fill="none" stroke="#f48bb7" stroke-width="3" stroke-linecap="round" opacity=".57"/>
+    <g fill="#28201c"><path d="M89 148c-13-19-17-38-10-56 5-9 10-13 18-17-5-10 6-18 15-13 17-16 42-25 67-23-4 7-5 11-5 15 24-6 45 8 50 20 19 11 22 32 13 64l-14 15-14-45c-36 8-69 5-89-3-6 16-14 28-31 43Z"/></g>
+    <path d="M108 159h36v17a12 12 0 0 1-12 12h-11a13 13 0 0 1-13-13Zm68 0h36v16a13 13 0 0 1-13 13h-11a12 12 0 0 1-12-12Zm-32 5q16-10 32 0" fill="none" stroke="#151515" stroke-width="3.5" stroke-linejoin="round"/>
+    
+    <path d="M126 273q34 30 68 0M77 344l-3 46m169-46 3 46" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" opacity=".65"/>
+  </g>
+  <path fill="url(#grain)" d="M0 0h320v390H0z"/>
+</svg>

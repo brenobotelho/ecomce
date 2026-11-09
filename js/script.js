@@ -1,25 +1,263 @@
-/* ===== CONFIGURAÇÃO ===== */
-const CFG={whatsapp:"",email:"",formEndpoint:"",social:[/* {nome:"Instagram",url:"https://..."} */]};
-const TESTIMONIALS=[/* {texto:"",nome:"",empresa:""} */];
-const PROJECTS=[["Marca conceito A","Branding","a1","Identidade visual e sistema gráfico."],["Campanha conceito B","Social Media","a2","Conteúdo, carrosséis e stories."],["Peça conceito C","Design","a3","Flyers e materiais de campanha."],["Landing conceito D","Web","a4","Landing page responsiva."],["Vídeo conceito E","Audiovisual","a5","Reels e criativos para anúncios."],["Sistema conceito F","Branding","a6","Direção de arte e aplicações."]];
-const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
-$("#yr").textContent=new Date().getFullYear();
-const mn=$("#mn"),bg=$("#bg");bg.onclick=()=>{const o=mn.classList.toggle("open");bg.setAttribute("aria-expanded",o)};$$("#mn a").forEach(a=>a.onclick=()=>{mn.classList.remove("open");bg.setAttribute("aria-expanded",false)});
-const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target)}}),{threshold:.12});$$(".rv").forEach(el=>io.observe(el));
-[["#ff3d9a","Marca",-6,14],["#c6f21b","Social",3,-4],["#ff6a13","Tráfego",-3,8],["#111","Web",4,-8],["#22d3ee","Design",-4,10],["#ff3d9a","Vídeo",5,-2],["#c6f21b","Reels",-5,12]].forEach(([c,l,r,y])=>{const d=document.createElement("div");d.className="tc";d.style.cssText=`background:${c};--r:${r}deg;--y:${y}px;color:${c==="#c6f21b"||c==="#22d3ee"?"#111":"#fff"}`;d.textContent=l;$("#row").appendChild(d)});
-const pg=$("#pg"),dg=$("#dg");
-PROJECTS.forEach(p=>{const b=document.createElement("button");b.className="pj";b.dataset.c=p[1];b.innerHTML=`<span class="art ${p[2]}"></span><span class="fk">Conceito fictício</span><span class="m">${p[0]}<small>${p[1]}</small></span>`;b.onclick=()=>{$("#da").className="art "+p[2];$("#dt").textContent=p[0];$("#dc").textContent=p[1]+" · Placeholder";$("#dd").textContent=p[3]+" Conteúdo demonstrativo: substitua por imagens e escopo reais.";dg.showModal()};pg.appendChild(b)});
-$("#dx").onclick=()=>dg.close();dg.addEventListener("click",e=>{if(e.target===dg)dg.close()});
-$$(".fil button").forEach(b=>b.onclick=()=>{$$(".fil button").forEach(x=>x.setAttribute("aria-pressed",x===b));$$(".pj").forEach(p=>p.classList.toggle("off",b.dataset.f!=="all"&&p.dataset.c!==b.dataset.f))});
-if(TESTIMONIALS.length){const t=TESTIMONIALS[0];$("#tq").textContent="“"+t.texto+"”";$("#tn").textContent=t.nome+" · "+t.empresa}
-const so=$("#so"),fc=$("#fc"),wa=$("#wa");
-CFG.social.forEach(s=>so.insertAdjacentHTML("beforeend",`<a href="${s.url}" target="_blank" rel="noopener">${s.nome}</a>`));
-fc.innerHTML=(CFG.whatsapp?`<a href="https://wa.me/${CFG.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>`:"")+(CFG.email?`<a href="mailto:${CFG.email}">${CFG.email}</a>`:"")+CFG.social.map(s=>`<a href="${s.url}" target="_blank" rel="noopener">${s.nome}</a>`).join("");
-const fm=$("#fm"),st=$("#st");function msg(c,t){st.className=c;st.textContent=t}
-if(CFG.whatsapp)wa.href="https://wa.me/"+CFG.whatsapp+"?text="+encodeURIComponent("Olá, é.com cê! Tenho um projeto e gostaria de conversar.");else wa.onclick=e=>{e.preventDefault();msg("no","O número oficial do WhatsApp ainda não foi configurado.");fm.scrollIntoView({behavior:"smooth",block:"center"})};
-fm.onsubmit=async e=>{e.preventDefault();let ok=true;
-$$("[required]",fm).forEach(f=>{const v=f.type==="email"?/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.value):f.value.trim().length>1;f.setAttribute("aria-invalid",!v);f.nextElementSibling.textContent=v?"":(f.type==="email"?"Informe um e-mail válido.":"Campo obrigatório.");if(!v)ok=false});
-if(!ok)return;if(!CFG.formEndpoint)return msg("no","O envio ainda não está integrado a um serviço. Use o WhatsApp enquanto isso.");
-try{const r=await fetch(CFG.formEndpoint,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(fm)))});if(!r.ok)throw 0;fm.reset();msg("ok","Mensagem enviada! Vamos responder em breve.")}catch{msg("no","Não foi possível enviar agora. Tente novamente ou fale pelo WhatsApp.")}};
-if(!matchMedia("(prefers-reduced-motion:reduce)").matches&&matchMedia("(hover:hover)").matches){const cs=$$(".stage .card");addEventListener("mousemove",e=>{const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;cs.forEach(c=>{const d=+c.dataset.d;c.style.transform=`translate(${x*d}px,${y*d}px) rotate(${x*d/8}deg)`})},{passive:true})}
-const mk=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)$$("#mn a:not(.btn)").forEach(a=>a.toggleAttribute("aria-current",a.getAttribute("href")==="#"+e.target.id))}),{rootMargin:"-45% 0px -50% 0px"});$$("main section[id]").forEach(s=>mk.observe(s));
+(() => {
+  "use strict";
+
+  // WhatsApp: informe DDI, DDD e número, somente dígitos. O formulário
+  // usa o e-mail do HTML até que um endpoint HTTPS de envio seja configurado.
+  const contactSettings = {
+    whatsapp: "",
+    formEndpoint: "",
+  };
+
+  function setupHeader() {
+    const header = document.querySelector(".site-header");
+    const bar = header.querySelector(".header-bar");
+    const toggle = header.querySelector(".menu-toggle");
+    const toggleLabel = toggle.querySelector(".sr-only");
+    const nav = header.querySelector(".site-nav");
+    const links = [...nav.querySelectorAll('a[href^="#"]')];
+    const sections = [...document.querySelectorAll("main > section[id]")];
+    const darkSurfaces = [...document.querySelectorAll('[data-theme="dark"]')];
+    const mobile = matchMedia("(max-width: 940px)");
+    let scheduled = false;
+
+    function setMenu(open, restoreFocus = false) {
+      nav.hidden = mobile.matches && !open;
+      toggle.setAttribute("aria-expanded", String(mobile.matches && open));
+      toggleLabel.textContent = open ? "Fechar menu" : "Abrir menu";
+      if (restoreFocus) toggle.focus();
+    }
+
+    function syncLayout() {
+      const focusWasInNav = nav.contains(document.activeElement);
+      const focusWasOnToggle = document.activeElement === toggle;
+      toggle.hidden = !mobile.matches;
+      setMenu(false, mobile.matches && focusWasInNav);
+      if (!mobile.matches && focusWasOnToggle) links[0].focus();
+    }
+
+    function updateHeader() {
+      scheduled = false;
+      const barRect = bar.getBoundingClientRect();
+      const sampleY = barRect.top + barRect.height / 2;
+      const dark = darkSurfaces.some((surface) => {
+        const rect = surface.getBoundingClientRect();
+        return rect.top <= sampleY && rect.bottom > sampleY;
+      });
+      const theme = dark ? "dark" : "light";
+      if (header.dataset.theme !== theme) header.dataset.theme = theme;
+
+      const current = sections.find((section) => {
+        const rect = section.getBoundingClientRect();
+        const marker = barRect.bottom + 24;
+        return rect.top <= marker && rect.bottom > marker;
+      });
+      links.forEach((link) => {
+        if (current && link.hash === "#" + current.id) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    }
+
+    function scheduleUpdate() {
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(updateHeader);
+    }
+
+    toggle.addEventListener("click", () => {
+      setMenu(toggle.getAttribute("aria-expanded") !== "true");
+    });
+    nav.addEventListener("click", (event) => {
+      const link = event.target.closest("a");
+      if (!link || !mobile.matches) return;
+      setMenu(false);
+      const section = link.getAttribute("href").startsWith("#")
+        ? document.getElementById(link.hash.slice(1))
+        : null;
+      if (section) {
+        section.tabIndex = -1;
+        section.focus({ preventScroll: true });
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+    });
+    document.addEventListener("click", (event) => {
+      if (mobile.matches && !nav.hidden && !header.contains(event.target)) setMenu(false);
+    });
+    document.addEventListener("focusin", (event) => {
+      if (mobile.matches && !nav.hidden && !header.contains(event.target)) setMenu(false);
+    });
+
+    document.documentElement.classList.add("has-fixed-header");
+    syncLayout();
+    updateHeader();
+    mobile.addEventListener("change", syncLayout);
+    addEventListener("scroll", scheduleUpdate, { passive: true });
+    addEventListener("resize", scheduleUpdate, { passive: true });
+    addEventListener("pageshow", scheduleUpdate);
+    addEventListener("load", scheduleUpdate, { once: true });
+    document.fonts?.ready.then(scheduleUpdate);
+  }
+
+  function setupReveals() {
+    if (!("IntersectionObserver" in window)) return;
+    const motion = matchMedia("(prefers-reduced-motion: reduce)");
+    if (motion.matches) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.dataset.revealState = "shown";
+        observer.unobserve(entry.target);
+      }
+    });
+
+    document.querySelectorAll("[data-reveal]").forEach((element) => {
+      if (element.getBoundingClientRect().top < innerHeight) return;
+      element.dataset.revealState = "pending";
+      observer.observe(element);
+    });
+
+    motion.addEventListener("change", () => {
+      if (!motion.matches) return;
+      observer.disconnect();
+      document.querySelectorAll('[data-reveal-state="pending"]').forEach((element) => {
+        delete element.dataset.revealState;
+      });
+    });
+  }
+
+  function setupContact() {
+    const form = document.querySelector("#contact-form");
+    if (!form) return;
+    const emailLink = document.querySelector("[data-contact-email]");
+    const whatsapp = document.querySelector("#whatsapp-link");
+    const submit = form.querySelector('button[type="submit"]');
+    const status = form.querySelector(".form-status");
+    const email = emailLink.getAttribute("href");
+    const { formEndpoint, whatsapp: phone } = contactSettings;
+
+    if (phone) {
+      whatsapp.href = "https://wa.me/" + phone + "?text=" + encodeURIComponent("Olá, é.com cê! Gostaria de conversar sobre um projeto.");
+      whatsapp.hidden = false;
+    }
+    if (formEndpoint) {
+      submit.textContent = "Enviar mensagem";
+      form.querySelector(".form-note").hidden = true;
+    }
+
+    function showStatus(message, error = false) {
+      status.textContent = message;
+      status.dataset.error = String(error);
+    }
+
+    form.addEventListener("input", (event) => {
+      event.target.setCustomValidity?.("");
+      if (status.textContent) showStatus("");
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const fields = Object.fromEntries([...new FormData(form)].map(([key, value]) => [key, value.trim()]));
+
+      for (const key of ["nome", "msg"]) {
+        if (fields[key]) continue;
+        const field = form.elements.namedItem(key);
+        field.setCustomValidity("Preencha este campo.");
+        field.reportValidity();
+        return;
+      }
+
+      if (!formEndpoint) {
+        const subject = encodeURIComponent("Novo projeto — é.com cê");
+        const body = encodeURIComponent([
+          "Nome: " + fields.nome,
+          "E-mail: " + fields.email,
+          fields.empresa && "Marca ou empresa: " + fields.empresa,
+          fields.servico && "Serviço: " + fields.servico,
+          "\n" + fields.msg,
+        ].filter(Boolean).join("\r\n"));
+
+        showStatus("Se o aplicativo não abrir, escreva para " + email.slice("mailto:".length) + ".");
+        location.href = email + "?subject=" + subject + "&body=" + body;
+        return;
+      }
+
+      submit.disabled = true;
+      showStatus("Enviando mensagem…");
+      try {
+        const response = await fetch(formEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(fields),
+        });
+        if (!response.ok) throw new Error("Falha no envio.");
+        form.reset();
+        showStatus("Mensagem enviada! Vamos responder em breve.");
+      } catch {
+        showStatus("Não foi possível enviar agora. Tente de novo ou use o link de e-mail.", true);
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    form.hidden = false;
+  }
+
+  function setupProjectFilters() {
+    const filters = document.querySelector(".project-filters");
+    if (!filters) return;
+    const projects = [...document.querySelectorAll("[data-project-category]")];
+    const buttons = [...filters.querySelectorAll("button")];
+    const status = document.querySelector("#project-filter-status");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const category = button.dataset.filter;
+        buttons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        let count = 0;
+        projects.forEach((project) => {
+          const visible = category === "todos" || project.dataset.projectCategory === category;
+          project.hidden = !visible;
+          if (visible) count++;
+        });
+        status.textContent = count === 1 ? "1 projeto exibido." : count + " projetos exibidos.";
+      });
+    });
+    filters.hidden = false;
+  }
+
+  function setupTeamMotion() {
+    const toggle = document.querySelector(".team-motion-toggle");
+    if (!toggle) return;
+    const track = document.querySelector(".team-track");
+    toggle.addEventListener("click", () => {
+      const paused = track.classList.toggle("is-paused");
+      toggle.textContent = paused ? "Continuar movimento" : "Pausar movimento";
+    });
+    toggle.hidden = false;
+  }
+
+  // Servidores estáticos abrem index.html automaticamente em cada pasta.
+  if (location.protocol === "file:") {
+    document.querySelectorAll('a[href^="./"], a[href^="../"]').forEach((link) => {
+      const url = new URL(link.href);
+      if (!url.pathname.endsWith("/")) return;
+      url.pathname += "index.html";
+      link.href = url.href;
+    });
+  }
+
+  document.querySelector("#current-year").textContent = new Date().getFullYear();
+  setupHeader();
+  setupContact();
+  setupProjectFilters();
+  setupTeamMotion();
+  setupReveals();
+})();
