@@ -233,18 +233,7 @@
     filters.hidden = false;
   }
 
-  function setupTeamMotion() {
-    const toggle = document.querySelector(".team-motion-toggle");
-    if (!toggle) return;
-    const track = document.querySelector(".team-track");
-    toggle.addEventListener("click", () => {
-      const paused = track.classList.toggle("is-paused");
-      toggle.textContent = paused ? "Continuar movimento" : "Pausar movimento";
-    });
-    toggle.hidden = false;
-  }
-
-  // Servidores estáticos abrem index.html automaticamente em cada pasta.
+// Servidores estáticos abrem index.html automaticamente em cada pasta.
   if (location.protocol === "file:") {
     document.querySelectorAll('a[href^="./"], a[href^="../"]').forEach((link) => {
       const url = new URL(link.href);
@@ -258,6 +247,5 @@
   setupHeader();
   setupContact();
   setupProjectFilters();
-  setupTeamMotion();
   setupReveals();
 })();
